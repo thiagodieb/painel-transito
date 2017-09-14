@@ -367,7 +367,6 @@ function initMap(coor_map) {
 }
 
 function disable_menu(){
-    $("div.demo-drawer.mdl-layout__drawer").remove();
     $("main.mdl-layout__content").css("margin-left","0px");
     $("header.mdl-layout__header").css({"margin-left":"0px","width":"100%"});
     $("div.demo-content").css("max-width","100%");

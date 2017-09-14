@@ -9,12 +9,14 @@ function center_control(){
 
   action = setInterval(function(){
       status = $.cookie("status_control");
+      data_center = get_maps();
       //console.log("OK");
       point = JSON.parse($.cookie("point_control"));
       console.log(point);
       if(point.new != undefined  && point.actual != point.new){
         point.actual = point.new;
         $.cookie("point_control",JSON.stringify(point));
+
         initMap(data_center[point.new]);
       }
       if(status != "play"){

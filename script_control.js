@@ -2,7 +2,7 @@
 
 function actions_buttons(){
   $(document).on('click', ".click_map", function() {
-    vl = $(this).attr("href");
+    vl = $(this).attr("alt");
     point = JSON.parse($.cookie("point_control"));
     point.new = vl;
     $.cookie("point_control",JSON.stringify(point));
@@ -11,15 +11,33 @@ function actions_buttons(){
 
   });
 
-  $(document).on('click', ".click_map", function() {
-    vl = $(this).attr("href");
-    point = JSON.parse($.cookie("point_control"));
-    point.new = vl;
-    $.cookie("point_control",JSON.stringify(point));
-    $(".mdl-color--blue-grey-100").removeClass("mdl-color--blue-grey-100");
-    $(this).offsetParent().addClass("mdl-color--blue-grey-100");
+  $(document).on('click', "#button_submit", function() {
+    lalg = $("#lat").val().split(",");
+    new_map = {
+      "nome":$("#nome").val(),
+      "descricao":$("#descricao").val(),
+      "center":{
+        "lat":parseFloat(lalg[0]),
+        "lng":parseFloat(lalg[1])
+      }
+    }
+    set_map(new_map);
+    data_center = get_maps();
+    i = data_center.length - 1;
+    mount_cards(i,data_center[i]);
 
   });
+
+
+  $(document).on('click', ".delete", function() {
+    vl = $(this).attr("alt");
+    remove_map(vl);
+    data_center = get_maps();
+    el = "#card-"+vl
+    $(el).remove();
+
+  });
+
 
 
   $( ".click_play" ).click(function() {
@@ -33,37 +51,35 @@ function actions_buttons(){
     }
   });
 
-
-
 }
 
-function mount_cards(){
+function mount_cards(i,$map){
 
-  $.each(data_center,function(i){
-      $elements = "<div class='demo-card-square mdl-card mdl-shadow--2dp'>";
+      $elements = "<div class='demo-card-square mdl-card mdl-shadow--2dp' id='card-"+i+"'>";
       $elements += "<div class='mdl-card__title mdl-card--expand'>";
-      $elements += "<h2 class='mdl-card__title-text'>"+data_center[i].nome+"</h2>";
+      $elements += "<h2 class='mdl-card__title-text'>"+$map.nome+"</h2>";
       $elements += "</div>";
-      $elements += "<div class='mdl-card__supporting-text'>"+data_center[i].descricao+"</div>";
+      $elements += "<div class='mdl-card__supporting-text'>"+$map.descricao+"</div>";
       $elements += "<div class='mdl-card__actions mdl-card--border'>";
-      $elements += "<a class='mdl-button center mdl-button--colored mdl-js-button mdl-js-ripple-effect click_map' href='"+i+"'>";
+      $elements += "<a class='mdl-button center mdl-button--colored mdl-js-button mdl-js-ripple-effect click_map' href='#' alt='"+i+"'>";
       $elements += "Habilitar";
       $elements += "</a></div>";
-      $elements += '<div class="mdl-card__menu"><button class="mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect"><i class="material-icons">edit</i></button></div>';
+      $elements += "<div class='mdl-card__menu'><button class='mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect'><i class='material-icons'>edit</i></button><button class='mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect delete' alt='"+i+"'><i class='material-icons'>delete</i></button></div>";
       $elements += "</div>";
       $(".demo-content").append($elements);
-  });
-
 }
 
 
 (function() {
   actions_buttons();
-  mount_cards();
+  $.each(data_center,function(i,k){
+    mount_cards(i,k);
+  });
+
 })();
 
 
-var form_s = ' <form action="#" class=""><div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"><input class="mdl-textfield__input" pattern="[A-Z,a-z, ]*" id="nome" type="text"><label class="mdl-textfield__label" for="nome">Nome...</label></div><div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"><input class="mdl-textfield__input" id="descricao" type="text"><label class="mdl-textfield__label" for="descricao">Descricao...</label></div><div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"><input class="mdl-textfield__input" id="lat" type="text"><label class="mdl-textfield__label" for="lat">Latitude...</label></div><div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"><input class="mdl-textfield__input" id="lng" type="text"><label class="mdl-textfield__label" for="lng">Longitude...</label></div></form>';
+var form_s = ' <form action="#" class=""><div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"><input class="mdl-textfield__input" pattern="[A-Z,a-z, ]*" id="nome" type="text"><label class="mdl-textfield__label" for="nome">Nome...</label></div><div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"><input class="mdl-textfield__input" id="descricao" type="text"><label class="mdl-textfield__label" for="descricao">Descricao...</label></div><div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"><input class="mdl-textfield__input" id="lat" type="text"><label class="mdl-textfield__label" for="lat">Latitude e Longitude</label></div></form>';
 
 $('#button-add').click(function () {
     showDialog({
