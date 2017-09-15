@@ -1,11 +1,10 @@
 
-
 function actions_buttons(){
   $(document).on('click', ".click_map", function() {
     vl = $(this).attr("alt");
-    point = JSON.parse($.cookie("point_control"));
+    point = get_storage("point_control");
     point.new = vl;
-    $.cookie("point_control",JSON.stringify(point));
+    set_storage("point_control",point);
     $(".mdl-color--blue-grey-100").removeClass("mdl-color--blue-grey-100");
     $(this).offsetParent().addClass("mdl-color--blue-grey-100");
 
@@ -64,20 +63,10 @@ function mount_cards(i,$map){
       $elements += "<a class='mdl-button center mdl-button--colored mdl-js-button mdl-js-ripple-effect click_map' href='#' alt='"+i+"'>";
       $elements += "Habilitar";
       $elements += "</a></div>";
-      $elements += "<div class='mdl-card__menu'><button class='mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect'><i class='material-icons'>edit</i></button><button class='mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect delete' alt='"+i+"'><i class='material-icons'>delete</i></button></div>";
+      $elements += "<div class='mdl-card__menu'><button class='mdl-button mdl-button--icon mdl-js-button mdl-js-ripple-effect delete' alt='"+i+"'><i class='material-icons'>delete</i></button></div>";
       $elements += "</div>";
       $(".demo-content").append($elements);
 }
-
-
-(function() {
-  actions_buttons();
-  $.each(data_center,function(i,k){
-    mount_cards(i,k);
-  });
-
-})();
-
 
 var form_s = ' <form action="#" class=""><div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"><input class="mdl-textfield__input" pattern="[A-Z,a-z, ]*" id="nome" type="text"><label class="mdl-textfield__label" for="nome">Nome...</label></div><div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"><input class="mdl-textfield__input" id="descricao" type="text"><label class="mdl-textfield__label" for="descricao">Descricao...</label></div><div class="mdl-textfield mdl-js-textfield mdl-textfield--floating-label"><input class="mdl-textfield__input" id="lat" type="text"><label class="mdl-textfield__label" for="lat">Latitude e Longitude</label></div></form>';
 
@@ -95,3 +84,12 @@ $('#button-add').click(function () {
         cancelable: false
     });
 });
+
+
+(function() {
+  actions_buttons();
+  $.each(data_center,function(i,k){
+    mount_cards(i,k);
+  });
+
+})();

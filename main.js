@@ -1,27 +1,32 @@
 
 function init_center_control(status,vl){
-  $.cookie("status_control",status);
-  $.cookie("point_control",JSON.stringify({"actual":vl}));
-
+  //$.cookie("status_control",status);
+  if (typeof(Storage) !== "undefined"){
+      localStorage.setItem("point_control",JSON.stringify({"actual":vl}) );
+      //localStorage.setItem("status_control",JSON.stringify({"s":status}) );
+  } else {
+      alert("Navegador não suporta tecnologia utilizada");
+  }
 }
 
 function center_control(){
 
   action = setInterval(function(){
-      status = $.cookie("status_control");
+    //  status = get_storage("status_control");
       data_center = get_maps();
       //console.log("OK");
-      point = JSON.parse($.cookie("point_control"));
+      point = get_storage("point_control");
+
       console.log(point);
       if(point.new != undefined  && point.actual != point.new){
         point.actual = point.new;
-        $.cookie("point_control",JSON.stringify(point));
-
+        set_storage("point_control",point,true);
         initMap(data_center[point.new]);
       }
-      if(status != "play"){
-        clearInterval(action)
-      }
+
+      // if(status.s != "play"){
+      //   clearInterval(action)
+      // }
   }, time);
 
 }

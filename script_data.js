@@ -1,9 +1,8 @@
 
 function init_map(data_default){
     if (typeof(Storage) !== "undefined"){
-        if(typeof(localStorage.getItem("data_center")) == "undefined" ) {
+        if(typeof(localStorage.getItem("data_center")) == "undefined" || localStorage.getItem("data_center") == null) {
             localStorage.setItem("data_center",JSON.stringify([]));
-
             $.each(data_default,function(i,k){
               set_map(k);
               });
@@ -14,38 +13,17 @@ function init_map(data_default){
 }
 
 function get_maps(){
-    if (typeof(Storage) !== "undefined") {
-           d = JSON.parse(localStorage.getItem("data_center"));
-          return d;
-    } else {
-        alert("Navegador não suporta tecnologia utilizada");
-    }
+  return get_storage("data_center");
 }
 
 function set_map($value){
-    if (typeof(Storage) !== "undefined") {
-          //localStorage.setItem("data_center",JSON.stringify(d));
-          d = JSON.parse(localStorage.getItem("data_center"));
-          //console.log(d);
-          d.push($value);
-          //console.log(d);
-          localStorage.setItem("data_center",JSON.stringify(d));
-    } else {
-        alert("Navegador não suporta tecnologia utilizada");
-    }
+  d = get_maps();
+  d.push($value);
+  set_storage("data_center",$value);
 }
 
 function remove_map($key){
-    if (typeof(Storage) !== "undefined") {
-          //localStorage.setItem("data_center",JSON.stringify(d));
-          d = JSON.parse(localStorage.getItem("data_center"));
-          console.log(d);
-          d.splice($key,1);
-          console.log(d);
-          localStorage.setItem("data_center",JSON.stringify(d));
-    } else {
-        alert("Navegador não suporta tecnologia utilizada");
-    }
+  remove_storage("data_center",$key);
 }
 
 data_default =[ { 'nome':"Ponte do Bragueto",
@@ -69,7 +47,8 @@ data_default =[ { 'nome':"Ponte do Bragueto",
 init_map(data_default);
 
 //remove_map(3);
-
+data_center = [];
 var data_center = get_maps();
+console.log(data_center);
 var point_initial = 1;
 var time = 1000;

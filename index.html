@@ -23,9 +23,11 @@
     <link rel="stylesheet" href="https://code.getmdl.io/1.3.0/material.indigo-blue.min.css" />
     <link rel="stylesheet" href="styles.css">
     <style>
-      #map {
-        height: 700px;
+      div#map {
+        height: 100%;
         width: 100%;
+        overflow: visible !important;
+        position: fixed !important;
       }
 
     </style>
@@ -34,7 +36,7 @@
       integrity="sha256-hwg4gsxgFZhOsEEamdOYGBf13FyQuiTwlAQgxVSNgt4="
       crossorigin="anonymous"></script>
       <script src="https://maps.googleapis.com/maps/api/js?key=AIzaSyD7L50UTD4VCQ0Y43vxd7br1rfJTMlLsp0&callback="></script>
-      <script src="lib/jquery.cookie.js"></script>
+      <script src="lib/storage.js"></script>
       <script src="script_data.js"></script>
 
   </head>
@@ -46,7 +48,7 @@
           <div class="mdl-layout-spacer"></div>
         </div>
       </header>
-      
+
       <main class="mdl-layout__content mdl-color--grey-100">
         <div class="mdl-grid demo-content">
 
